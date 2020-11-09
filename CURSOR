@@ -1,0 +1,19 @@
+DECLARE @JSonResult NVARCHAR(MAX),
+		@VCode BIGINT
+
+DECLARE vendor_cursor CURSOR FOR   
+SELECT JSonData,VCode FROM AZ.BiarEvent WHERE VCode > 24241
+  
+OPEN vendor_cursor  
+  
+FETCH NEXT FROM vendor_cursor   
+INTO @JSonResult, @VCode  
+  
+WHILE @@FETCH_STATUS = 0  
+BEGIN  
+    SELECT @VCode 
+	SELECT * FROM OPENJSON(@JSonResult)
+    FETCH NEXT FROM vendor_cursor INTO @JSonResult, @VCode
+END   
+CLOSE vendor_cursor;  
+DEALLOCATE vendor_cursor;  
